@@ -1,0 +1,19 @@
+{
+  "name": "coronamining",
+  "version": "1.0.0",
+  "description": "",
+  "main": "scrape.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Astr0nAT/CoronaMining.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Astr0nAT/CoronaMining/issues"
+  },
+  "homepage": "https://github.com/Astr0nAT/CoronaMining#readme"
+}
