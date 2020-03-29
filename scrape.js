@@ -110,6 +110,7 @@ request(url, (error, response, html) => {
 
     // 4
     deathsAustria = removeDots(wordArray[1]);
+    deathsAustria = removeParentheses(deathsAustria, 0, 1);
 
     // 5
     deathsTirol = removeDots(wordArray[16]);
