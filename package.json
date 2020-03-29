@@ -15,5 +15,14 @@
   "bugs": {
     "url": "https://github.com/Astr0nAT/CoronaMining/issues"
   },
-  "homepage": "https://github.com/Astr0nAT/CoronaMining#readme"
+  "homepage": "https://github.com/Astr0nAT/CoronaMining#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "request": "^2.88.2",
+    "rimraf": "^3.0.2",
+    "unzipper": "^0.10.10",
+    "webdav": "^3.2.0",
+    "xmldom": "^0.3.0",
+    "xpath": "0.0.27"
+  }
 }

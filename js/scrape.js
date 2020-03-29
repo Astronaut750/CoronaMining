@@ -5,34 +5,42 @@ const dom = require("xmldom").DOMParser;
 const fs = require("fs");
 const { createClient } = require("webdav");
 
+let date = new Date();
+
 let url =
   "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html";
 
-let wordArray;
-let date = new Date();
 let tests;
+
+let wordArray;
 let casesAustria;
 let casesTirol;
+
 let deathsAustria;
 let deathsTirol;
+
+let recover;
+
 let casesInter;
 let casesChina;
+
 let recoverInter;
-let diskStationLogin = JSON.parse(fs.readFileSync("userData.json"));
+
+let diskStationLogin = JSON.parse(
+  fs.readFileSync(__dirname + "/../login/diskStationLogin.json")
+);
 
 const webDAVclient = createClient("http://10.0.0.11:5005", {
   username: diskStationLogin.account,
   password: diskStationLogin.password
 });
 
-function stripString1(strip) {
-  strip = strip.substring(1, strip.length - 2);
-  return strip;
+function removeDots(word) {
+  return word.split(".").join("");
 }
 
-function stripString2(strip) {
-  strip = strip.substring(0, strip.length - 1);
-  return strip;
+function removeParentheses(word, pre, suf) {
+  return word.substring(pre, word.length - suf);
 }
 
 function convertDateTimeFile(date) {
@@ -82,56 +90,53 @@ request(url, (error, response, html) => {
       }
     }).parseFromString($.html());
 
-    tests = xpath
-      .select("/html/body/div[3]/div/div/div/div[2]/main/p[2]/text()", doc)
-      .toString()
-      .split(".")
-      .join("");
+    // 1
+    tests = removeDots(
+      xpath.select1(
+        "/html/body/div[3]/div/div/div/div[2]/main/p[2]/text()",
+        doc
+      ).data
+    );
 
     wordArray = xpath
-      .select("/html/body/div[3]/div/div/div/div[2]/main/p[3]/text()", doc)
-      .toString()
-      .split(" ");
+      .select1("/html/body/div[3]/div/div/div/div[2]/main/p[3]/text()", doc)
+      .data.split(" ");
 
-    casesAustria = wordArray[1].split(".").join("");
+    // 2
+    casesAustria = removeDots(wordArray[1]);
 
-    casesTirol = stripString1(wordArray[18])
-      .split(".")
-      .join("");
+    // 3
+    casesTirol = removeDots(wordArray[18]);
+    casesTirol = removeParentheses(casesTirol, 1, 2);
 
     wordArray = xpath
-      .select("/html/body/div[3]/div/div/div/div[2]/main/p[4]/text()[2]", doc)
-      .toString()
-      .split(" ");
+      .select1("/html/body/div[3]/div/div/div/div[2]/main/p[4]/text()[2]", doc)
+      .data.split(" ");
 
-    deathsAustria = stripString2(wordArray[1])
-      .split(".")
-      .join("");
+    // 4
+    deathsAustria = removeDots(wordArray[1]);
 
-    deathsTirol = stripString1(wordArray[16])
-      .split(".")
-      .join("");
+    // 5
+    deathsTirol = removeDots(wordArray[16]);
+    deathsTirol = removeParentheses(deathsTirol, 1, 2);
 
-    casesInter = xpath
-      .select("/html/body/div[3]/div/div/div/div[2]/main/p[5]/strong[2]", doc)
-      .toString()
-      .substring(8, casesInter.length - 10)
-      .split(".")
-      .join("");
+    // 6
+    recover = removeDots(
+      xpath.select1(
+        "/html/body/div[3]/div/div/div/div[2]/main/p[5]/text()",
+        doc
+      ).data
+    );
+    recover = removeParentheses(recover, 2, 0);
 
-    casesChina = xpath
-      .select("/html/body/div[3]/div/div/div/div[2]/main/p[5]/strong[3]", doc)
-      .toString()
-      .substring(8, casesChina.length - 10)
-      .split(".")
-      .join("");
+    // 7
+    casesInter = null;
 
-    recoverInter = xpath
-      .select("/html/body/div[3]/div/div/div/div[2]/main/p[6]/strong[2]", doc)
-      .toString()
-      .substring(8, recoverInter.length - 9)
-      .split(".")
-      .join("");
+    // 8
+    casesChina = null;
+
+    // 9
+    recoverInter = null;
   }
 });
 
@@ -143,6 +148,7 @@ setTimeout(function() {
     casesTirol: casesTirol.toString(),
     deathsAustria: deathsAustria.toString(),
     deathsTirol: deathsTirol.toString(),
+    recover: recover.toString(),
     casesInter: casesInter.toString(),
     casesChina: casesChina.toString(),
     recoverInter: recoverInter.toString()
