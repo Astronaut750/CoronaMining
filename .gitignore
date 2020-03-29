@@ -1,5 +1,2 @@
-login/
-node_modules/*
+diskStationLogin.json
 node_modules/
-scrapes/
-scrapes/*

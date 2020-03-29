@@ -10,25 +10,18 @@ let date = new Date();
 let url =
   "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html";
 
-let tests;
+let tests,
+  wordArray,
+  casesAustria,
+  casesTirol,
+  deathsAustria,
+  deathsTirol,
+  recover,
+  casesInter,
+  casesChina,
+  recoverInter;
 
-let wordArray;
-let casesAustria;
-let casesTirol;
-
-let deathsAustria;
-let deathsTirol;
-
-let recover;
-
-let casesInter;
-let casesChina;
-
-let recoverInter;
-
-let diskStationLogin = JSON.parse(
-  fs.readFileSync(__dirname + "/../login/diskStationLogin.json")
-);
+let diskStationLogin = JSON.parse(fs.readFileSync("./diskStationLogin.json"));
 
 const webDAVclient = createClient("http://10.0.0.11:5005", {
   username: diskStationLogin.account,
@@ -130,28 +123,45 @@ request(url, (error, response, html) => {
     recover = removeParentheses(recover, 2, 0);
 
     // 7
-    casesInter = null;
+    casesInter = removeDots(
+      xpath.select1(
+        "/html/body/div[3]/div/div/div/div[2]/main/p[6]/strong[2]",
+        doc
+      ).childNodes[0].data
+    );
+    casesInter = removeParentheses(casesInter, 0, 1);
 
     // 8
-    casesChina = null;
+    casesChina = removeDots(
+      xpath.select1(
+        "/html/body/div[3]/div/div/div/div[2]/main/p[6]/strong[3]",
+        doc
+      ).childNodes[0].data
+    );
+    casesChina = removeParentheses(casesChina, 0, 1);
 
     // 9
-    recoverInter = null;
+    recoverInter = removeDots(
+      xpath.select1(
+        "/html/body/div[3]/div/div/div/div[2]/main/p[7]/strong[2]",
+        doc
+      ).childNodes[0].data
+    );
   }
 });
 
 setTimeout(function() {
   let dataCorona = {
     timestamp: convertDateTimeSQL(date).toString(),
-    tests: tests.toString(),
-    casesAustria: casesAustria.toString(),
-    casesTirol: casesTirol.toString(),
-    deathsAustria: deathsAustria.toString(),
-    deathsTirol: deathsTirol.toString(),
-    recover: recover.toString(),
-    casesInter: casesInter.toString(),
-    casesChina: casesChina.toString(),
-    recoverInter: recoverInter.toString()
+    tests: tests,
+    casesAustria: casesAustria,
+    casesTirol: casesTirol,
+    deathsAustria: deathsAustria,
+    deathsTirol: deathsTirol,
+    recover: recover,
+    casesInter: casesInter,
+    casesChina: casesChina,
+    recoverInter: recoverInter
   };
   let dataBinary = JSON.stringify(dataCorona, null, 2);
   let filename =
@@ -162,4 +172,4 @@ setTimeout(function() {
   writer = webDAVclient.createWriteStream(filename);
   writer.write(dataBinary);
   writer.end();
-}, 3000);
+}, 5000);
