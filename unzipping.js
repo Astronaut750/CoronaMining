@@ -6,4 +6,4 @@ fs.mkdirSync("./CoronaMining");
 fs.createReadStream("./CoronaMining.zip").pipe(
   uz.Extract({ path: "./CoronaMining/" })
 );
-console.log("Updated project.");
+console.log("Extracting project...");
