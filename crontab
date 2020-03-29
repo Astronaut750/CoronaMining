@@ -1,2 +1,4 @@
 0 1,7,13,19 * * * /opt/nodejs/bin/node /home/pi/CoronaMining/scrape.js
+0 0 1 * * sudo reboot
+0 3 * * 0 sudo apt-get update && sudo apt-get upgrade
 

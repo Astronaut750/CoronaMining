@@ -22,7 +22,7 @@ let tests,
   recoverInter;
 
 let diskStationLogin = JSON.parse(
-  fs.readFileSync(__dirname + "diskStationLogin.json")
+  fs.readFileSync(__dirname + "/diskStationLogin.json")
 );
 
 const webDAVclient = createClient("http://10.0.0.11:5005", {
