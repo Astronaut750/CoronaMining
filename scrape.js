@@ -16,9 +16,9 @@ let tests,
   casesTirol,
   deathsAustria,
   deathsTirol,
-  recover,
+  recoverAustria,
+  recoverTirol,
   casesInter,
-  casesChina,
   recoverInter;
 
 let diskStationLogin = JSON.parse(
@@ -116,16 +116,19 @@ request(url, (error, response, html) => {
     deathsTirol = removeDots(wordArray[16]);
     deathsTirol = removeParentheses(deathsTirol, 1, 2);
 
+    wordArray = xpath
+      .select1("/html/body/div[3]/div/div/div/div[2]/main/p[5]/text()", doc)
+      .data.split(" ");
+
     // 6
-    recover = removeDots(
-      xpath.select1(
-        "/html/body/div[3]/div/div/div/div[2]/main/p[5]/text()",
-        doc
-      ).data
-    );
-    recover = removeParentheses(recover, 2, 0);
+    recoverAustria = removeDots(wordArray[1]);
+    recoverAustria = removeParentheses(recoverAustria, 0, 1);
 
     // 7
+    recoverTirol = removeDots(wordArray[16]);
+    recoverTirol = removeParentheses(recoverTirol, 1, 2);
+
+    // 8
     casesInter = removeDots(
       xpath.select1(
         "/html/body/div[3]/div/div/div/div[2]/main/p[6]/strong[2]",
@@ -133,15 +136,6 @@ request(url, (error, response, html) => {
       ).childNodes[0].data
     );
     casesInter = removeParentheses(casesInter, 0, 1);
-
-    // 8
-    casesChina = removeDots(
-      xpath.select1(
-        "/html/body/div[3]/div/div/div/div[2]/main/p[6]/strong[3]",
-        doc
-      ).childNodes[0].data
-    );
-    casesChina = removeParentheses(casesChina, 0, 1);
 
     // 9
     recoverInter = removeDots(
@@ -161,9 +155,9 @@ setTimeout(function() {
     casesTirol: casesTirol,
     deathsAustria: deathsAustria,
     deathsTirol: deathsTirol,
-    recover: recover,
+    recoverAustria: recoverAustria,
+    recoverTirol: recoverTirol,
     casesInter: casesInter,
-    casesChina: casesChina,
     recoverInter: recoverInter
   };
   let dataBinary = JSON.stringify(dataCorona, null, 2);
