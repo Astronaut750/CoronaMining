@@ -17,7 +17,7 @@ let tests,
   deathsAustria,
   deathsTirol,
   recoverAustria,
-  recoverTirol,
+  recoverTirol = 0,
   casesInter,
   recoverInter;
 
@@ -120,13 +120,22 @@ request(url, (error, response, html) => {
       .select1("/html/body/div[3]/div/div/div/div[2]/main/p[5]/text()", doc)
       .data.split(" ");
 
+    recoverAustria = removeDots(
+      xpath.select1(
+        "/html/body/div[3]/div/div/div/div[2]/main/p[5]/text()",
+        doc
+      ).data
+    );
+
+    recoverAustria = removeParentheses(recoverAustria, 1, 0);
+
     // 6
-    recoverAustria = removeDots(wordArray[1]);
-    recoverAustria = removeParentheses(recoverAustria, 0, 1);
+    // recoverAustria = removeDots(wordArray[1]);
+    // recoverAustria = removeParentheses(recoverAustria, 0, 1);
 
     // 7
-    recoverTirol = removeDots(wordArray[16]);
-    recoverTirol = removeParentheses(recoverTirol, 1, 2);
+    // recoverTirol = removeDots(wordArray[16]);
+    // recoverTirol = removeParentheses(recoverTirol, 1, 2);
 
     // 8
     casesInter = removeDots(
