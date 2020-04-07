@@ -27,7 +27,7 @@ let diskStationLogin = JSON.parse(
 
 const webDAVclient = createClient("http://10.0.0.11:5005", {
   username: diskStationLogin.account,
-  password: diskStationLogin.password
+  password: diskStationLogin.password,
 });
 
 function removeDots(word) {
@@ -77,12 +77,12 @@ request(url, (error, response, html) => {
     var doc = new dom({
       locator: {},
       errorHandler: {
-        warning: function(w) {},
-        error: function(e) {},
-        fatalError: function(e) {
+        warning: function (w) {},
+        error: function (e) {},
+        fatalError: function (e) {
           console.error(e);
-        }
-      }
+        },
+      },
     }).parseFromString($.html());
 
     wordArray = xpath
@@ -90,7 +90,7 @@ request(url, (error, response, html) => {
       .data.split(" ");
 
     // 1
-    tests = removeDots(wordArray[0]);
+    tests = removeDots(wordArray[1]);
 
     wordArray = xpath
       .select1("/html/body/div[3]/div/div/div/div[2]/main/p[3]/text()", doc)
@@ -146,18 +146,24 @@ request(url, (error, response, html) => {
   }
 });
 
-setTimeout(function() {
+setTimeout(function () {
   let dataCorona = {
     timestamp: convertDateTimeSQL(date).toString(),
-    tests: tests,
-    casesAustria: casesAustria,
-    casesTirol: casesTirol,
-    deathsAustria: deathsAustria,
-    deathsTirol: deathsTirol,
-    recoverAustria: recoverAustria,
-    recoverTirol: recoverTirol,
-    casesInter: casesInter,
-    recoverInter: recoverInter
+    tests: parseInt(tests),
+    casesAustria: parseInt(casesAustria),
+    casesTirol: parseInt(casesTirol),
+    activeAustria:
+      parseInt(casesAustria) -
+      parseInt(recoverAustria) -
+      parseInt(deathsAustria),
+    activeTirol:
+      parseInt(casesTirol) - parseInt(recoverTirol) - parseInt(deathsTirol),
+    deathsAustria: parseInt(deathsAustria),
+    deathsTirol: parseInt(deathsTirol),
+    recoverAustria: parseInt(recoverAustria),
+    recoverTirol: parseInt(recoverTirol),
+    casesInter: parseInt(casesInter),
+    recoverInter: parseInt(recoverInter),
   };
   let dataBinary = JSON.stringify(dataCorona, null, 2);
   let filename =
