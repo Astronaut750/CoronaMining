@@ -108,11 +108,11 @@ request(url, (error, response, html) => {
       .data.split(" ");
 
     // 4
-    deathsAustria = removeDots(wordArray[1]);
+    deathsAustria = removeDots(wordArray[0]);
     deathsAustria = removeParentheses(deathsAustria, 0, 1);
 
     // 5
-    deathsTirol = removeDots(wordArray[16]);
+    deathsTirol = removeDots(wordArray[15]);
     deathsTirol = removeParentheses(deathsTirol, 1, 2);
 
     wordArray = xpath
