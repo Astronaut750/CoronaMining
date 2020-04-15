@@ -134,7 +134,7 @@ request(url, (error, response, html) => {
         doc
       ).childNodes[0].data
     );
-    casesInter = removeParentheses(casesInter, 0, 1);
+    // casesInter = removeParentheses(casesInter, 0, 1);
 
     // 9
     recoverInter = removeDots(
